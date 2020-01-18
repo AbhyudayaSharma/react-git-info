@@ -1,0 +1,19 @@
+{
+  "name": "react-git-info",
+  "version": "1.0.0",
+  "description": "Git commit information for your react app",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Abhyudaya Sharma",
+  "license": "MIT",
+  "keywords": [
+    "babel-plugin-macros",
+    "react",
+    "git"
+  ],
+  "dependencies": {
+    "babel-plugin-macros": "^2.8.0"
+  }
+}
