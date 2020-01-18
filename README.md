@@ -1,5 +1,7 @@
 # react-git-info
 
+[![npm version](https://badge.fury.io/js/react-git-info.svg)](https://badge.fury.io/js/react-git-info)
+
 Get git commit information in your React Application as a JavaScript object.
 No configuration necessary if you use create-react-app.
 
