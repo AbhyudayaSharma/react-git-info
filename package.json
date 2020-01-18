@@ -11,9 +11,14 @@
   "keywords": [
     "babel-plugin-macros",
     "react",
+    "create-react-app",
     "git"
   ],
   "dependencies": {
     "babel-plugin-macros": "^2.8.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/AbhyudayaSharma/react-git-info"
   }
 }
