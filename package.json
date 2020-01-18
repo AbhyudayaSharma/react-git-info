@@ -20,5 +20,9 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/AbhyudayaSharma/react-git-info"
-  }
+  },
+  "files": [
+    "src",
+    "macro.js"
+  ]
 }

@@ -10,10 +10,10 @@ const gitInfo = (() => {
     ret.commit = {
       date: execSync('git log --format="%cI" -n 1 HEAD').toString().trim(),
       message: execSync('git log --format="%B" -n 1 HEAD').toString().trim(),
-      commitHash: execSync('git rev-parse HEAD').toString().trim(),
+      hash: execSync('git rev-parse HEAD').toString().trim(),
       // we could've just taken a substring from the full commit hash but that would ignore
       // the short commit hash length defined as `core.abbrev` in gitconfig
-      shortCommitHash: execSync('git rev-parse --short HEAD').toString().trim(),
+      shortHash: execSync('git rev-parse --short HEAD').toString().trim(),
     };
   } catch (e) {
     throw Error(`Unable to parse the git information: ${e}`);
