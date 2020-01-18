@@ -13,7 +13,7 @@ npm install --save-dev react-git-info
 
 After that you can import the information to your static React files.
 
-```js
+```jsx
 import GitInfo from 'react-git-info/macro';
 
 const gitInfo = GitInfo();
@@ -22,6 +22,9 @@ console.log(gitInfo.commit.date);
 console.log(gitInfo.commit.hash);
 console.log(gitInfo.commit.message);
 console.log(gitInfo.commit.shortHash);
+
+// or from JSX
+<p>{gitInfo.commit.message}</p>
 ```
 
 ## How it works
