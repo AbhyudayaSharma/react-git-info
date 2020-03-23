@@ -6,7 +6,7 @@ const gitInfo = (() => {
   const ret = {};
   try {
     // TODO try to extract all information from a single `execSync` call
-    ret.branch = execSync('git branch --show-current').toString().trim();
+    ret.branch = execSync('git rev-parse --abbrev-ref HEAD').toString().trim();
     ret.commit = {
       date: execSync('git log --format="%cI" -n 1 HEAD').toString().trim(),
       message: execSync('git log --format="%B" -n 1 HEAD').toString().trim(),
