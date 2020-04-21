@@ -20,7 +20,7 @@ const gitInfo = (() => {
                 .toString().trim().split(/\r?\n/).filter(Boolean);
   } catch (e) {
     throw Error(`Unable to parse the git information: ${e}`);
-  } 
+  }
   return ret;
 })();
 
