@@ -18,6 +18,11 @@ const gitInfo = (() => {
   } catch (e) {
     throw Error(`Unable to parse the git information: ${e}`);
   }
+  try {
+    // try and get an exact tag. this is expected to throw if there is no tag
+    ret.tag = execSync('git describe --tags --exact-match').toString().trim();
+  } catch(_) {}
+  
   return ret;
 })();
 
