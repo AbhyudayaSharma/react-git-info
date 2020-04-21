@@ -20,7 +20,7 @@ import GitInfo from 'react-git-info/macro';
 
 const gitInfo = GitInfo();
 console.log(gitInfo.branch);
-console.log(gitInfo.tag);
+console.log(gitInfo.tags);
 console.log(gitInfo.commit.date);
 console.log(gitInfo.commit.hash);
 console.log(gitInfo.commit.message);
