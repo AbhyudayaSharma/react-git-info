@@ -15,14 +15,12 @@ const gitInfo = (() => {
       // the short commit hash length defined as `core.abbrev` in gitconfig
       shortHash: execSync('git rev-parse --short HEAD').toString().trim(),
     };
+    // get any tags that ref this commit, filtering out falsy strings (i.e. if the cmd output is empty)
+    ret.tags = execSync(`git tag --list --points-at ${ret.commit.hash}`)
+                .toString().trim().split(/\r?\n/).filter(Boolean);
   } catch (e) {
     throw Error(`Unable to parse the git information: ${e}`);
-  }
-  try {
-    // try and get an exact tag. this is expected to throw if there is no tag
-    ret.tag = execSync('git describe --tags --exact-match').toString().trim();
-  } catch(_) {}
-  
+  } 
   return ret;
 })();
 
