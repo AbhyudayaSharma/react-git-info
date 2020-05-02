@@ -32,26 +32,7 @@ console.log(gitInfo.commit.shortHash);
 
 ### TypeScript Support
 
-If you have enabled TypeScript support in your React App, you can get type definitions for this library
-by adding a `react-git-info.d.ts` file in your source directory with the following contents:
-
-```typescript
-declare module 'react-git-info/macro' {
-
-  export interface GitInformation {
-    readonly tags: string[];
-    readonly branch: string;
-    readonly commit: {
-      readonly date: string;
-      readonly hash: string;
-      readonly message: string;
-      readonly shortHash: string;
-    };
-  }
-
-  export default function GitInfo(): GitInformation;
-}
-```
+There is built-in TypeScript support, you won't have to install external types.
 
 ## How it works
 

@@ -23,6 +23,7 @@
   },
   "files": [
     "src",
+    "macro.d.ts",
     "macro.js"
   ]
 }
