@@ -1,8 +1,9 @@
-const { execSync } = require('child_process');
 const { createMacro } = require('babel-plugin-macros');
+const { execSync } = require('child_process');
+const { v4: uuidv4 } = require('uuid');
 
 const gitLogToJSON = (() => {
-  const X = "@_!@_@!_@"; // if anyone uses THIS string in her commit message, gitInfo will fail.
+  const X = uuidv4(); // use unique identifier as separator to avoid collisions with git content
   const commitFormat = `{${X}date${X}: ${X}%cI${X}, ${X}message${X}: ${X}%B${X}, ${X}hash${X}: ${X}%H${X}, ${X}shortHash${X}: ${X}%h${X}}`;
   const format = `{${X}refs${X}: ${X}%D${X}, ${X}commit${X}: ${commitFormat}}`;
   const logResult = execSync(`git log --format="${format}" -n 1 HEAD`)
