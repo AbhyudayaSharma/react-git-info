@@ -18,7 +18,7 @@ const gitLogToJSON = (() => {
 const parseRefs = (refs) => {
   let branch;
   const tags = [];
-  refs.split(",").map((item) => {
+  refs.split(", ").map((item) => {
     const isBranch = item.match(/HEAD -> (.*)/);
     const isTag = item.match(/tag: (.*)/);
 
