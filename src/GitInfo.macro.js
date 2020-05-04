@@ -6,7 +6,7 @@ const parseGitLog = (() => {
   let refs = '';
   const commit = {};
   // only the commit message can have multiple lines. Make sure to always add at the end:
-  const logResult = execSync(`git log --format="%D%n%h%n%H%n%cI%n%B" -n 1 HEAD`)
+  const logResult = execSync('git log --format="%D%n%h%n%H%n%cI%n%B" -n 1 HEAD')
     .toString()
     .trim()
     .split("\n");
