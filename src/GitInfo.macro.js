@@ -1,7 +1,7 @@
 const { createMacro } = require('babel-plugin-macros');
 const { execSync } = require('child_process');
 
-const gitLogToJSON = (() => {
+const parseGitLog = (() => {
     let message = '';
     let refs = '';
     const commit = {};
@@ -34,7 +34,7 @@ const parseRefs = (refs) => {
 const gitInfo = (() => {
   const ret = {};
   try {
-    const logResult = gitLogToJSON;
+    const logResult = parseGitLog;
     [ret.branch, ret.tags] = parseRefs(logResult.refs);
     ret.commit = logResult.commit;
   } catch (e) {
