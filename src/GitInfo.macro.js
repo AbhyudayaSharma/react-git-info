@@ -9,7 +9,7 @@ const parseGitLog = (() => {
   const logResult = execSync('git log --format="%D%n%h%n%H%n%cI%n%B" -n 1 HEAD')
     .toString()
     .trim()
-    .split("\n");
+    .split(/\r?\n/);
   [refs, commit.shortHash, commit.hash, commit.date, ...message] = logResult;
   commit.message = message.join("\n");
   return {refs, commit};
