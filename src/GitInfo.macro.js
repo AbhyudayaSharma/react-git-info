@@ -1,23 +1,42 @@
-const { execSync } = require('child_process');
 const { createMacro } = require('babel-plugin-macros');
+const { execSync } = require('child_process');
 
-// calling git from the command line should be done just once
+const parseGitLog = (() => {
+  let message = '';
+  let refs = '';
+  const commit = {};
+  // only the commit message can have multiple lines. Make sure to always add at the end:
+  const logResult = execSync('git log --format="%D%n%h%n%H%n%cI%n%B" -n 1 HEAD')
+    .toString()
+    .trim()
+    .split(/\r?\n/);
+  [refs, commit.shortHash, commit.hash, commit.date, ...message] = logResult;
+  commit.message = message.join("\n");
+  return {refs, commit};
+})();
+
+const parseRefs = (refs) => {
+  let branch;
+  const tags = [];
+  refs.split(", ").map((item) => {
+    const isBranch = item.match(/HEAD -> (.*)/);
+    const isTag = item.match(/tag: (.*)/);
+
+    if (isTag && isTag.length > 1) {
+      tags.push(isTag[1]);
+    } else {
+      branch = isBranch ? isBranch[1] : branch;
+    }
+  });
+  return [branch, tags];
+};
+
 const gitInfo = (() => {
   const ret = {};
   try {
-    // TODO try to extract all information from a single `execSync` call
-    ret.branch = execSync('git rev-parse --abbrev-ref HEAD').toString().trim();
-    ret.commit = {
-      date: execSync('git log --format="%cI" -n 1 HEAD').toString().trim(),
-      message: execSync('git log --format="%B" -n 1 HEAD').toString().trim(),
-      hash: execSync('git rev-parse HEAD').toString().trim(),
-      // we could've just taken a substring from the full commit hash but that would ignore
-      // the short commit hash length defined as `core.abbrev` in gitconfig
-      shortHash: execSync('git rev-parse --short HEAD').toString().trim(),
-    };
-    // get any tags that ref this commit, filtering out falsy strings (i.e. if the cmd output is empty)
-    ret.tags = execSync(`git tag --list --points-at ${ret.commit.hash}`)
-                .toString().trim().split(/\r?\n/).filter(Boolean);
+    const logResult = parseGitLog;
+    [ret.branch, ret.tags] = parseRefs(logResult.refs);
+    ret.commit = logResult.commit;
   } catch (e) {
     throw Error(`Unable to parse the git information: ${e}`);
   }
