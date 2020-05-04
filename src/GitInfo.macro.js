@@ -20,8 +20,10 @@ const parseRefs = (refs) => {
   let branch = undefined;
   const tags = [];
   refs.split(', ').map((item) => {
-    const isBranch = item.match(/HEAD -> (.*)/);
-    const isTag = item.match(/tag: (.*)/);
+    // if HEAD is not detached, the branch is printed out as `HEAD -> branch_name`.
+    // if HEAD is detached, the output becomes `HEAD`.
+    const isBranch = item.match(/^HEAD -> (.*)$/);
+    const isTag = item.match(/^tag: (.*)$/);
 
     if (isTag && isTag.length > 1) {
       tags.push(isTag[1]);
@@ -29,10 +31,6 @@ const parseRefs = (refs) => {
       branch = isBranch ? isBranch[1] : branch;
     }
   });
-
-  if (!branch) {
-    throw Error('Unable to get parse branch from the log result.');
-  }
 
   return [branch, tags];
 };
