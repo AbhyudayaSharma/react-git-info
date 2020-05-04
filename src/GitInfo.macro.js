@@ -2,17 +2,17 @@ const { createMacro } = require('babel-plugin-macros');
 const { execSync } = require('child_process');
 
 const parseGitLog = (() => {
-    let message = '';
-    let refs = '';
-    const commit = {};
-    // only the commit message can have multiple lines. Make sure to always add at the end:
-    const logResult = execSync(`git log --format="%D%n%h%n%H%n%cI%n%B" -n 1 HEAD`)
-        .toString()
-        .trim()
-        .split("\n");
-    [refs, commit.shortHash, commit.hash, commit.date, ...message] = logResult;
-    commit.message = message.join("\n");
-    return {refs, commit};
+  let message = '';
+  let refs = '';
+  const commit = {};
+  // only the commit message can have multiple lines. Make sure to always add at the end:
+  const logResult = execSync(`git log --format="%D%n%h%n%H%n%cI%n%B" -n 1 HEAD`)
+    .toString()
+    .trim()
+    .split("\n");
+  [refs, commit.shortHash, commit.hash, commit.date, ...message] = logResult;
+  commit.message = message.join("\n");
+  return {refs, commit};
 })();
 
 const parseRefs = (refs) => {
