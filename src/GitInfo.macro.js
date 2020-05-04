@@ -16,7 +16,7 @@ const parseGitLog = (() => {
 })();
 
 const parseRefs = (refs) => {
-  let branch;
+  let branch = "HEAD"; // default for detached HEAD state
   const tags = [];
   refs.split(", ").map((item) => {
     const isBranch = item.match(/HEAD -> (.*)/);
