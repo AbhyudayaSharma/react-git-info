@@ -24,7 +24,12 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: ${{ matrix.node-version }}
+    - name: Setup Git for committing
+      run: |
+        git config --global user.name "GitHub Actions"
+        git config --global user.email "gh-actions@domain"
     - run: npm ci
-    - name: test
+      name: Run NPM clean install
+    - name: Run tests
       shell: pwsh
       run: ./test/GitInfoTest.ps1
