@@ -34,11 +34,6 @@ if (-not $?) {
   throw 'Local package installation failed.'
 }
 
-yarn upgrade
-if (-not $?) {
-  throw 'Yarn upgrade failed'
-}
-
 
 Write-Output '------------------- Test 1 -------------------'
 
