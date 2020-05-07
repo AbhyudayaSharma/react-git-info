@@ -20,94 +20,94 @@ $tempPath = [System.IO.Path]::GetTempPath()
 $testRepoPath = Join-Path $tempPath $name
 New-Item -ItemType Directory -Path $testRepoPath | Out-Null
 
-# Create a react app using create-react-app
-Set-Location $testRepoPath
-npx create-react-app .
-if (-not $?) {
-  throw 'Unable to create react app'
+try {
+  # Create a react app using create-react-app
+  Set-Location $testRepoPath
+  npx create-react-app .
+  if (-not $?) {
+    throw 'Unable to create react app'
+  }
+
+  # Install the package
+  Write-Output "Installing local package from $repoPath..."
+  yarn add $repoPath
+  if (-not $?) {
+    throw 'Local package installation failed.'
+  }
+
+
+  Write-Output '------------------- Test 1 -------------------'
+
+  $testFile = '01.test.js'
+  $testScript = Join-Path $testRepoPath "src/$testFile"
+  Copy-Item (Join-Path $scriptsPath $testFile) $testScript
+
+  $commandError = $false
+
+  git tag 'hello-world'
+  $commandError = $commandError -or -not $?
+  git tag 'hello-world-again'
+  $commandError = $commandError -or -not $?
+
+  if ($commandError) {
+    throw 'Unable to run git commands.'
+  }
+
+  yarn test
+  if (-not $?) {
+    throw "One or more tests failed. Exit code = $LASTEXITCODE"
+  }
+
+  Remove-Item -Force $testScript
+
+
+  Write-Output '------------------- Test 2 -------------------'
+
+  $testFile = '02.test.js'
+  $testScript = Join-Path $testRepoPath "src/$testFile"
+  Copy-Item (Join-Path $scriptsPath $testFile) $testScript
+
+  git commit --allow-empty -m 'Git commit message'
+  $commandError = $commandError -or -not $?
+
+  if ($commandError) {
+    throw 'Unable to run git commands.'
+  }
+
+  yarn test
+  if (-not $?) {
+    throw "One or more tests failed. Exit code = $LASTEXITCODE"
+  }
+
+  Remove-Item -Force $testScript
+
+
+  Write-Output '------------------- Test 3 -------------------'
+
+  # tests for detached HEAD
+
+  $testFile = '03.test.js'
+  $testScript = Join-Path $testRepoPath "src/$testFile"
+  Copy-Item (Join-Path $scriptsPath $testFile) $testScript
+
+  $firstCommit = (git rev-list --max-parents=0 HEAD | Out-String).Trim()
+  $commandError = $commandError -or -not $?
+  git checkout $firstCommit
+  $commandError = $commandError -or -not $?
+
+  if ($commandError) {
+    throw 'Unable to run git commands.'
+  }
+
+  yarn test
+  if (-not $?) {
+    throw "One or more tests failed. Exit code = $LASTEXITCODE"
+  }
+
+  Remove-Item -Force $testScript
+} finally {
+  Write-Output 'Cleaning up...'
+  Pop-Location
+  $env:CI = $oldEnvCI
+  Remove-Item -Recurse -Force $testRepoPath
 }
-
-# Install the package
-Write-Output "Installing local package from $repoPath..."
-yarn add $repoPath
-if (-not $?) {
-  throw 'Local package installation failed.'
-}
-
-
-Write-Output '------------------- Test 1 -------------------'
-
-$testFile = '01.test.js'
-$testScript = Join-Path $testRepoPath "src/$testFile"
-Copy-Item (Join-Path $scriptsPath $testFile) $testScript
-
-$commandError = $false
-
-git tag 'hello-world'
-$commandError = $commandError -or -not $?
-git tag 'hello-world-again'
-$commandError = $commandError -or -not $?
-
-if ($commandError) {
-  throw 'Unable to run git commands.'
-}
-
-yarn test
-if (-not $?) {
-  throw "One or more tests failed. Exit code = $LASTEXITCODE"
-}
-
-Remove-Item -Force $testScript
-
-
-Write-Output '------------------- Test 2 -------------------'
-
-$testFile = '02.test.js'
-$testScript = Join-Path $testRepoPath "src/$testFile"
-Copy-Item (Join-Path $scriptsPath $testFile) $testScript
-
-git commit --allow-empty -m 'Git commit message'
-$commandError = $commandError -or -not $?
-
-if ($commandError) {
-  throw 'Unable to run git commands.'
-}
-
-yarn test
-if (-not $?) {
-  throw "One or more tests failed. Exit code = $LASTEXITCODE"
-}
-
-Remove-Item -Force $testScript
-
-
-Write-Output '------------------- Test 3 -------------------'
-
-# tests for detached HEAD
-
-$testFile = '03.test.js'
-$testScript = Join-Path $testRepoPath "src/$testFile"
-Copy-Item (Join-Path $scriptsPath $testFile) $testScript
-
-$firstCommit = (git rev-list --max-parents=0 HEAD | Out-String).Trim()
-$commandError = $commandError -or -not $?
-git checkout $firstCommit
-$commandError = $commandError -or -not $?
-
-if ($commandError) {
-  throw 'Unable to run git commands.'
-}
-
-yarn test
-if (-not $?) {
-  throw "One or more tests failed. Exit code = $LASTEXITCODE"
-}
-
-Remove-Item -Force $testScript
-
-
-Write-Output '------------------- Cleanup -------------------'
-
-Pop-Location
-$env:CI = $oldEnvCI
-Remove-Item -Recurse -Force $testRepoPath
