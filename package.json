@@ -15,7 +15,7 @@
     "git"
   ],
   "dependencies": {
-    "babel-plugin-macros": "^2.8.0"
+    "babel-plugin-macros": "^3.1.0"
   },
   "repository": {
     "type": "git",
