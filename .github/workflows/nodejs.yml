@@ -5,6 +5,8 @@ on:
     branches: [ master ]
   pull_request:
     branches: [ master ]
+  schedule:
+    - cron: '0 0 */1 * *'
 
 jobs:
   build:
@@ -17,7 +19,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, macOS-latest]
-        node-version: [10.x, 12.x]
+        node-version: [14.x, 16.x]
 
     steps:
     - uses: actions/checkout@v2
