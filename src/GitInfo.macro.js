@@ -7,7 +7,7 @@ const parsedGitLog = (() => {
   const commit = {};
   // only the commit message can have multiple lines. Make sure to always add at the end:
   // The format is specified in https://git-scm.com/docs/git-log#_pretty_formats
-  let gitCommand = 'git log --format=%D%n%h%n%H%n%cI%n%B -n 1 HEAD';
+  let gitCommand = 'git log --format=%D%n%h%n%H%n%cI%n%B -n 1 HEAD --';
   if (process.platform === 'win32') {
     gitCommand = gitCommand.replace(/%/g, '^%'); // need to escape percents in batch
   }
