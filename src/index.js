@@ -1,1 +1,1 @@
-module.exports = require('./GitInfo.macro');
+module.exports = require('./GitVersion.macro');

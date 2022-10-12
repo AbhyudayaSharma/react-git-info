@@ -35,7 +35,7 @@ try {
     throw 'Local package installation failed.'
   }
 
-
+<# 
   Write-Output '------------------- Test 1 -------------------'
 
   $testFile = '01.test.js'
@@ -93,6 +93,71 @@ try {
   $firstCommit = (git rev-list --max-parents=0 HEAD | Out-String).Trim()
   $commandError = $commandError -or -not $?
   git checkout $firstCommit
+  $commandError = $commandError -or -not $?
+
+  if ($commandError) {
+    throw 'Unable to run git commands.'
+  }
+
+  yarn test
+  if (-not $?) {
+    throw "One or more tests failed. Exit code = $LASTEXITCODE"
+  }
+
+  Remove-Item -Force $testScript #>
+
+  Write-Output '------------------- Test 4 -------------------'
+
+  $testFile = '04.test.js'
+  $testScript = Join-Path $testRepoPath "src/$testFile"
+  Copy-Item (Join-Path $scriptsPath $testFile) $testScript
+
+  $commandError = $false
+  git tag 'hello-version'
+  $commandError = $commandError -or -not $?
+
+  if ($commandError) {
+    throw 'Unable to run git commands.'
+  }
+
+  yarn test
+  if (-not $?) {
+    throw "One or more tests failed. Exit code = $LASTEXITCODE"
+  }
+
+  Remove-Item -Force $testScript
+
+  Write-Output '------------------- Test 5 -------------------'
+
+  $testFile = '05.test.js'
+  $testScript = Join-Path $testRepoPath "src/$testFile"
+  Copy-Item (Join-Path $scriptsPath $testFile) $testScript
+
+  $commandError = $false
+  git add .
+  git commit --allow-empty -m 'Git commit message'
+  $commandError = $commandError -or -not $?
+
+  if ($commandError) {
+    throw 'Unable to run git commands.'
+  }
+
+  yarn test
+  if (-not $?) {
+    throw "One or more tests failed. Exit code = $LASTEXITCODE"
+  }
+
+  Remove-Item -Force $testScript
+
+  Write-Output '------------------- Test 6 -------------------'
+
+  $testFile = '06.test.js'
+  $testScript = Join-Path $testRepoPath "src/$testFile"
+  Copy-Item (Join-Path $scriptsPath $testFile) $testScript
+
+  $commandError = $false
+  git commit --allow-empty -m 'Another Git commit message'
+  touch randomfile.txt
   $commandError = $commandError -or -not $?
 
   if ($commandError) {

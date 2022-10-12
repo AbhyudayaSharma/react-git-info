@@ -1,4 +1,4 @@
-import GitInfo from 'react-git-info/macro';
+import  GitInfo from 'react-git-info/macro';
 
 const gitInfo = GitInfo();
 

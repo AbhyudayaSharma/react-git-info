@@ -40,8 +40,32 @@ declare module "react-git-info/macro" {
     readonly commit: GitCommitInformation;
   }
 
+  export interface GitVersion {
+    /**
+     * Most recent tag from the current commit.
+     */
+    readonly tag: string;
+    /**
+     * Number of additional commits since the most recent tag.
+     */
+    readonly distance: number;
+    /**
+     * Abbreviated commit hash.
+     */
+    readonly shortHash: string;
+    /**
+     * True if the working tree has local modifications.
+     */
+    readonly isDirty: boolean;
+  }
+
   /**
    * Returns information about the current Git state.
    */
   export default function GitInfo(): GitInformation;
+
+  /**
+   * Returns information about the current Git version.
+   */
+  export function GitVersion(): GitVersion;
 }
